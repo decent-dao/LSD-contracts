@@ -8,6 +8,9 @@ contract LiquidityHub {
 
     address streamCreator;
     mapping(address => address) xTokenTodToken;
+
+
+    event AmountClaimed(address claimer, uint256 amount, address xToken, address dToken);
     function initalize(address _streamCreator) public {
         streamCreator = _streamCreator;
     } 
@@ -16,9 +19,9 @@ contract LiquidityHub {
         xTokenTodToken[xtoken] = dtoken;
     }
 
-    function cliamAmount(address xtoken, address dtoken) public {
-        uint totalXAmount = IERC20(xtoken).balanceOf(address(this));
-        uint userDAmount = IERC20(dtoken).balanceOf(msg.sender);
+    function cliamAmount(address xToken, address dToken) public {
+        uint totalXAmount = IERC20(xToken).balanceOf(address(this));
+        uint userDAmount = IERC20(dToken).balanceOf(msg.sender);
 
         uint userXClaim;
         userDAmount <= totalXAmount ? 
@@ -26,8 +29,10 @@ contract LiquidityHub {
         userXClaim = totalXAmount;
 
         
-        IERC20(dtoken).safeTransferFrom(msg.sender, address(0), (userXClaim * _fairClaim()));
-        IERC20(xtoken).safeTransfer(msg.sender, (userXClaim * _fairClaim()));
+        IERC20(dToken).safeTransferFrom(msg.sender, address(0), (userXClaim * _fairClaim()));
+        IERC20(xToken).safeTransfer(msg.sender, (userXClaim * _fairClaim()));
+        emit AmountClaimed(msg.sender, userXClaim, xToken, dToken);
+
     }
 
     function _fairClaim() public pure returns(uint) {
