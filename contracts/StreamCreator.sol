@@ -8,8 +8,7 @@ import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol
 import "@openzeppelin/contracts-upgradeable/utils/CountersUpgradeable.sol";
 import "./Stream.sol";
 import "./DToken.sol";
-
-// import "@superfluid-finance/ethereum-contracts/contracts/interfaces/superfluid/ISuperTokenFactory.sol";
+import "./LiquidityHub.sol";
 
 contract StreamCreator {
     using SafeERC20 for IERC20;
@@ -31,13 +30,13 @@ contract StreamCreator {
         address _streamImpl;
         address[] _investors;
         uint256[] _allocations;
-        uint256[] _maturityTime;
+        uint256 _maturityTime;
     }
     mapping(uint256 => StreamDetails[]) public idToRound;
     mapping(address => uint256) public streamToId;
-    address host;
-    address streamHub;
-    SuperTokenFactory tokenWrapperFactory;
+    address public host;
+    SuperTokenFactory public tokenWrapperFactory;
+    LiquidityHub public liquidityHub;
 
     event RoundCreaated(
         address _pToken,
@@ -49,11 +48,11 @@ contract StreamCreator {
 
     function initialize(
         address _host,
-        address _streamHub,
-        SuperTokenFactory _tokenWrapperFactory
+        SuperTokenFactory _tokenWrapperFactory,
+        LiquidityHub _liquidityHub
     ) public {
         host = _host;
-        streamHub = _streamHub;
+        liquidityHub = _liquidityHub;
         tokenWrapperFactory = _tokenWrapperFactory;
     }
 
@@ -92,7 +91,7 @@ contract StreamCreator {
                 _id,
                 ISuperfluid(host),
                 ISuperfluidToken(xToken),
-                streamHub,
+                address(liquidityHub),
                 _stream,
                 1000 // todo:flowrate
             );
@@ -102,11 +101,12 @@ contract StreamCreator {
                 StreamDetails(
                     round._allocations[i],
                     block.timestamp,
-                    round._maturityTime[i]
+                    round._maturityTime
                 )
             );
         }
 
+        liquidityHub.addStream(xToken, dToken); // Init market
         emit RoundCreaated(
             address(round._pToken),
             xToken,
