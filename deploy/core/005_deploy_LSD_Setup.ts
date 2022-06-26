@@ -6,11 +6,11 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
   const liquidityHub = await hre.ethers.getContract("LiquidityHub");
 
   await streamCreator.initialize(
-    "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
-    "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+    "0x567c4B141ED61923967cA25Ef4906C8781069a10",
+    "0x8276469A443D5C6B7146BED45e2abCaD3B6adad9",
     liquidityHub.address
   );
-  // await liquidityHub.initialize(streamCreator.address);
+  await liquidityHub.initialize(streamCreator.address);
 };
 
 export default func;
