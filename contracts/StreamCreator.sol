@@ -123,7 +123,7 @@ contract StreamCreator {
         string memory _symbol
     ) public returns (ISuperToken _xToken) {
         bytes4 FUNC_SELECTOR = bytes4(
-            keccak256("createERC20Wrapper(IERC20,uint8,string,string)")
+            keccak256("createERC20Wrapper(address,uint8,string,string)")
         );
 
         bytes memory data = abi.encodeWithSelector(
