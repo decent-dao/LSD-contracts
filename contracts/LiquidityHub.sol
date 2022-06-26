@@ -11,7 +11,7 @@ contract LiquidityHub {
 
 
     event AmountClaimed(address claimer, uint256 amount, address xToken, address dToken);
-    function initalize(address _streamCreator) public {
+    function initialize(address _streamCreator) public {
         streamCreator = _streamCreator;
     } 
 
