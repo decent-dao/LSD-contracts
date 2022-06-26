@@ -29,6 +29,9 @@ const config: HardhatUserConfig = {
       rinkeby: `privatekey://${process.env.RINKEBY_DEPLOYER_PRIVATE_KEY}`,
       goerli: `privatekey://${process.env.GOERLI_DEPLOYER_PRIVATE_KEY}`,
       kovan: `privatekey://${process.env.KOVAN_DEPLOYER_PRIVATE_KEY}`,
+      skale: `privatekey://${process.env.SKALE_DEPLOYER_PRIVATE_KEY}`,
+      optimism: `privatekey://${process.env.OPTIMISM_DEPLOYER_PRIVATE_KEY}`,
+      polygon: `privatekey://${process.env.POLYGON_DEPLOYER_PRIVATE_KEY}`,
     },
   },
   networks: {
@@ -56,6 +59,21 @@ const config: HardhatUserConfig = {
       chainId: 42,
       url: process.env.KOVAN_PROVIDER,
       accounts: [process.env.KOVAN_DEPLOYER_PRIVATE_KEY || ""],
+    },
+    skale: {
+      chainId: 0x40b9020d,
+      url: process.env.SKALE_PROVIDER,
+      accounts: [process.env.SKALE_DEPLOYER_PRIVATE_KEY || ""],
+    },
+    optimism: {
+      chainId: 10,
+      url: process.env.OPTIMISM_PROVIDER,
+      accounts: [process.env.OPTIMISM_DEPLOYER_PRIVATE_KEY || ""],
+    },
+    polygon: {
+      chainId: 137,
+      url: process.env.POLYGON_PROVIDER,
+      accounts: [process.env.POLYGON_DEPLOYER_PRIVATE_KEY || ""],
     },
   },
   etherscan: {
